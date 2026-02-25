@@ -23,14 +23,16 @@ RUN apt-get update && apt-get install -y \
     libxshmfence1 \
     curl \
     git \
+    pandoc \
     && rm -rf /var/lib/apt/lists/*
 
 # Set Chromium path for agent-browser
 ENV AGENT_BROWSER_EXECUTABLE_PATH=/usr/bin/chromium
 ENV PLAYWRIGHT_CHROMIUM_EXECUTABLE_PATH=/usr/bin/chromium
 
-# Install agent-browser and claude-code globally
-RUN npm install -g agent-browser @anthropic-ai/claude-code
+# Install document creation libraries and tools globally
+RUN npm install -g agent-browser @anthropic-ai/claude-code \
+    docx pptxgenjs exceljs pdf-lib pdfkit
 
 # Create app directory
 WORKDIR /app

@@ -153,12 +153,15 @@ sock.ev.on('connection.update', async (update) => {
 });
 `;
 
-    const output = execSync(`node --input-type=module -e ${JSON.stringify(syncScript)}`, {
+    const tmpScript = path.join(projectRoot, 'store', '.sync-groups.mjs');
+    fs.writeFileSync(tmpScript, syncScript);
+    const output = execSync(`node ${tmpScript}`, {
       cwd: projectRoot,
       encoding: 'utf-8',
       timeout: 45000,
       stdio: ['ignore', 'pipe', 'pipe'],
     });
+    fs.unlinkSync(tmpScript);
     syncOk = output.includes('SYNCED:');
     logger.info({ output: output.trim() }, 'Sync output');
   } catch (err) {
